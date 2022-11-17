@@ -1,3 +1,7 @@
+using Demo.Server.Data;
+using Demo.Server.Models;
+using Demo.Server.Types;
+
 namespace Demo.Tests;
 
 public static class TestServices
@@ -6,9 +10,18 @@ public static class TestServices
     {
         Services = new ServiceCollection()
             .AddGraphQLServer()
-            .AddQueryType<Query>()
-            .AddSubscriptionType<Subscription>()
+            .AddQueryType<QueryType>()
+            .AddMutationType<MutationType>()
+            .AddType<PuppyType>()
+            .AddType<AddPuppyInputType>()
             .Services
+
+            // Use scoped data services so we can give each test class instance its own scope
+            .AddScoped<IIdGenerator, IncrementingIdGenerator>()
+            .AddScoped<IRepository<Puppy>>(
+                _ => new InMemoryRepository<Puppy>(
+                    DefaultDoggos.GetPuppies()
+                ))
             .AddSingleton(
                 sp => new RequestExecutorProxy(
                     sp.GetRequiredService<IRequestExecutorResolver>(),
@@ -24,16 +37,16 @@ public static class TestServices
 
     public static async Task<string> ExecuteRequestAsync(
         Action<IQueryRequestBuilder> configureRequest,
+        IServiceScope serviceScope,
         CancellationToken cancellationToken = default)
     {
-        await using var scope = Services.CreateAsyncScope();
-
         var requestBuilder = new QueryRequestBuilder();
-        requestBuilder.SetServices(scope.ServiceProvider);
+        requestBuilder.SetServices(serviceScope.ServiceProvider);
         configureRequest(requestBuilder);
         var request = requestBuilder.Create();
 
-        await using var result = await Executor.ExecuteAsync(request, cancellationToken);
+        // Note: can't do "await using" since we are on HC 12.x and I wanted to emulate that here
+        using var result = await Executor.ExecuteAsync(request, cancellationToken);
 
         result.ExpectQueryResult();
 
