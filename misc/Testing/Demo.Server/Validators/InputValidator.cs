@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Demo.Server.Data;
+using FluentValidation;
 
 namespace Demo.Server.Validators
 {
@@ -8,8 +9,9 @@ namespace Demo.Server.Validators
     /// <typeparam name="TInput">The type of input this validator validates.</typeparam>
     public abstract class InputValidator<TInput> : AbstractValidator<TInput>, IInputValidator<TInput>
     {
-        protected InputValidator()
+        protected InputValidator(IDataContext dataContext)
         {
+
             // Short-circuit validation on first validation error.
             this.CascadeMode = CascadeMode.Stop;
         }

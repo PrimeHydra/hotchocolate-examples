@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Demo.Server.Validators
 {
@@ -23,13 +24,11 @@ namespace Demo.Server.Validators
             where TValidator : IInputValidator<TInput>
         {
             return descriptor.Use(
-                (services, next) =>
+                (_, next) =>
                 {
-                    var inputValidator = services.GetService<TValidator>();
-
                     return new InputValidationMiddleware<TInput>(
+                        typeof(TValidator),
                         next,
-                        inputValidator,
                         inputArgumentName);
                 });
         }

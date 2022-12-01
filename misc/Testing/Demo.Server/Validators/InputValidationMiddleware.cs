@@ -1,5 +1,7 @@
-﻿using System.Security.Claims;
+﻿using System.Reflection;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Demo.Server.Data;
 using FluentValidation.Results;
 using HotChocolate.Resolvers;
 
@@ -10,17 +12,17 @@ namespace Demo.Server.Validators
     /// </remarks>
     public class InputValidationMiddleware<TInput>
     {
+        private readonly Type validatorType;
         private readonly FieldDelegate next;
-        private readonly IInputValidator<TInput> validator;
         private readonly string inputArgumentName;
 
         public InputValidationMiddleware(
+            Type validatorType,
             FieldDelegate next,
-            IInputValidator<TInput> validator,
             string inputArgumentName)
         {
+            this.validatorType = validatorType;
             this.next = next;
-            this.validator = validator;
             this.inputArgumentName = inputArgumentName;
         }
 
@@ -29,6 +31,7 @@ namespace Demo.Server.Validators
             var input = context.ArgumentValue<TInput>(inputArgumentName);
             if (input != null)
             {
+                IInputValidator<TInput> validator = CreateValidator(context);
                 ValidationResult result = await validator.ValidateAsync(input);
                 if (!result.IsValid)
                 {
@@ -46,6 +49,16 @@ namespace Demo.Server.Validators
             }
 
             await next(context).ConfigureAwait(false);
+        }
+
+        private IInputValidator<TInput> CreateValidator(IMiddlewareContext middlewareContext)
+        {
+            var services = new ServiceCollection();
+            services.AddScoped(this.validatorType);
+            services.AddScoped(_ => middlewareContext.Service<IDataContext>());
+            ServiceProvider provider = services.BuildServiceProvider();
+
+            return (IInputValidator<TInput>)provider.GetRequiredService(this.validatorType);
         }
     }
 }

@@ -17,6 +17,7 @@ namespace Demo.Server
                 .Services
 
                 // Use scoped data services so we can give each test class instance its own scope
+                .AddScoped<IDataContext, DataContext>()
                 .AddScoped<IIdGenerator, IncrementingIdGenerator>()
                 .AddScoped<IRepository<Puppy>>(
                     _ => new InMemoryRepository<Puppy>(

@@ -9,14 +9,15 @@ namespace Demo.Server.Validators
     /// </summary>
     public class GetPuppyInputValidator : InputValidator<string>
     {
-        public GetPuppyInputValidator(IRepository<Puppy> puppyRepo)
+        public GetPuppyInputValidator(IDataContext dataContext) 
+            : base(dataContext)
         {
             this.RuleFor(
                 puppyId =>
                     puppyId).MustAsync(
                 async (puppyId, _) =>
                 {
-                    Puppy? puppy = await puppyRepo.GetAsync(puppyId);
+                    Puppy? puppy = await dataContext.PuppyRepository.GetAsync(puppyId);
 
                     return puppy != null;
                 }).WithMessage(s => $"The puppy with ID ${s} does not exist.");
