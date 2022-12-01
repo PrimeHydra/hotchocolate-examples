@@ -22,17 +22,6 @@ namespace Demo.Server.Data
                 }
             };
 
-            // Simulate large collection to more closely resemble our huge test bed
-            for (int i = 0; i < 10000; i++)
-            {
-                list.Add(new Puppy()
-                {
-                    Id = $"Id_RoboPup_{i}",
-                    Name = $"Robo Pup #{i}",
-                    Breed = "Hyundai",
-                });
-            }
-
             return list;
         }
     }
