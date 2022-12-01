@@ -1,11 +1,11 @@
-namespace Demo.Tests;
+namespace Demo.Tests.Mutations;
 
-public class MutationTests : QueryTestBase
+public class Add : QueryTestBase
 {
     [Fact]
     public async Task AddSparkyAndReadHimBack()
     {
-        await this.ExecuteQueryAsync(
+        await ExecuteQueryAsync(
             @"
 mutation {
   addPuppy(input: { name: ""Sparky"", breed: ""Beagle"" }) {
@@ -14,7 +14,7 @@ mutation {
 }
                 ");
 
-        var result = await this.ExecuteQueryAsync(
+        var result = await ExecuteQueryAsync(
             @"
 {
   puppy(id: ""Id_1"") {
@@ -32,7 +32,7 @@ mutation {
     [Fact]
     public async Task AddDaisyAndReadHerBack()
     {
-        await this.ExecuteQueryAsync(
+        await ExecuteQueryAsync(
             @"
 mutation {
   addPuppy(input: { name: ""Daisy"", breed: ""Golden Doodle"" }) {
@@ -41,7 +41,7 @@ mutation {
 }
                 ");
 
-        var result = await this.ExecuteQueryAsync(
+        var result = await ExecuteQueryAsync(
             @"
 {
   puppy(id: ""Id_1"") {

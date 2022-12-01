@@ -1,5 +1,6 @@
 ﻿using Demo.Server.Data;
 using Demo.Server.Models;
+using Demo.Server.Validators;
 
 namespace Demo.Server.Types
 {
@@ -11,6 +12,7 @@ namespace Demo.Server.Types
                 .Description("Gets the puppy with the given id")
                 .Argument("id", a => a.Type<NonNullType<StringType>>().Description("ID of the puppy to retrieve."))
                 .Type<PuppyType>()
+                .UseValidator<GetPuppyInputValidator, string>(inputArgumentName: "id")
                 .Resolve(
                     async context =>
                     {

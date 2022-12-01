@@ -8,6 +8,11 @@ namespace Demo.Tests
 {
     public abstract class QueryTestBase : IDisposable
     {
+        /// <summary>
+        /// Use a separate service scope for each test class instance
+        /// so that the test can change data without affecting other
+        /// tests being run in parallel.
+        /// </summary>
         private readonly IServiceScope serviceScope;
 
         protected QueryTestBase()

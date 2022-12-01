@@ -2,7 +2,7 @@
 {
     public class IncrementingIdGenerator : IIdGenerator
     {
-        public int lastId;
+        private int lastId;
 
         public string CreateId()
         {

@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="HotChocolate.AspNetCore" Version="12.15.2" />
+    <PackageReference Include="FluentValidation" Version="10.0.4" />
     <PackageReference Include="HotChocolate.Types.Analyzers" Version="12.15.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

@@ -1,21 +1,12 @@
 using Demo.Server.Types;
 using Demo.Server.Data;
 using Demo.Server.Models;
+using Demo.Server.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddGraphQLServer()
-    .AddQueryType<QueryType>()
-    .AddMutationType<MutationType>()
-    .AddType<PuppyType>()
-    .AddType<AddPuppyInputType>()
-    .Services
-    .AddSingleton<IIdGenerator, IncrementingIdGenerator>()
-    .AddSingleton<IRepository<Puppy>>(
-        _ => new InMemoryRepository<Puppy>(
-            DefaultDoggos.GetPuppies()
-        ));
+    .AddGraphQLWithPuppies();
 
 var app = builder.Build();
 

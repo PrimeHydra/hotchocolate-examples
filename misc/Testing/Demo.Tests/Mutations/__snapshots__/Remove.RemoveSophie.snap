@@ -1,0 +1,19 @@
+﻿{
+  "errors": [
+    {
+      "message": "The puppy with ID $Id_Sophie does not exist.",
+      "locations": [
+        {
+          "line": 3,
+          "column": 3
+        }
+      ],
+      "path": [
+        "puppy"
+      ]
+    }
+  ],
+  "data": {
+    "puppy": null
+  }
+}

@@ -4,20 +4,36 @@ namespace Demo.Server.Data
 {
     public static class DefaultDoggos
     {
-        public static List<Puppy> GetPuppies() => new List<Puppy>()
+        public static List<Puppy> GetPuppies()
         {
-            new Puppy
+            var list = new List<Puppy>()
             {
-                Id = "Id_Sophie",
-                Name = "Sophie D Chillingshead",
-                Breed = "Chihuahua",
-            },
-            new Puppy
+                new Puppy
+                {
+                    Id = "Id_Sophie",
+                    Name = "Sophie D Chillingshead",
+                    Breed = "Chihuahua",
+                },
+                new Puppy
+                {
+                    Id = "Id_Hoakie",
+                    Name = "Hoakie Malone",
+                    Breed = "Sheltie",
+                }
+            };
+
+            // Simulate large collection to more closely resemble our huge test bed
+            for (int i = 0; i < 10000; i++)
             {
-                Id = "Id_Hoakie",
-                Name = "Hoakie Malone",
-                Breed = "Sheltie",
+                list.Add(new Puppy()
+                {
+                    Id = $"Id_RoboPup_{i}",
+                    Name = $"Robo Pup #{i}",
+                    Breed = "Hyundai",
+                });
             }
-        };
+
+            return list;
+        }
     }
 }

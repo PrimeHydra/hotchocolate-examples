@@ -30,5 +30,21 @@ public class MutationType : ObjectType<Mutation>
 
                     return puppy;
                 });
+
+        descriptor.Field("removePuppy")
+            .Description("Removes a puppy from the system and returns the ID of the puppy that was removed.")
+            .Argument(
+                "input",
+                a => a.Type<NonNullType<RemovePuppyInputType>>().Description("Input specifying the puppy to remove."))
+            .Type<StringType>()
+            .Resolve(
+                async context =>
+                {
+                    var input = context.ArgumentValue<RemovePuppyInput>("input");
+                    var repo = context.Services.GetRequiredService<IRepository<Puppy>>();
+                    await repo.DeleteAsync(input.Id);
+
+                    return input.Id;
+                });
     }
 }

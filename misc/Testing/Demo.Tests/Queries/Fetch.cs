@@ -1,9 +1,9 @@
 using System.Text;
 using Microsoft.Extensions.DiagnosticAdapter.Internal;
 
-namespace Demo.Tests;
+namespace Demo.Tests.Queries;
 
-public class QueryTests : QueryTestBase
+public class Fetch : QueryTestBase
 {
     [Fact]
     public async Task FetchSophie()
