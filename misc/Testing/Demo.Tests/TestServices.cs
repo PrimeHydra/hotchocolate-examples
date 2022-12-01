@@ -15,7 +15,7 @@ public static class TestServices
                 sp => new RequestExecutorProxy(
                     sp.GetRequiredService<IRequestExecutorResolver>(),
                     Schema.DefaultName))
-            .BuildServiceProvider();
+            .BuildServiceProvider(validateScopes: true);
 
         Executor = Services.GetRequiredService<RequestExecutorProxy>();
     }
