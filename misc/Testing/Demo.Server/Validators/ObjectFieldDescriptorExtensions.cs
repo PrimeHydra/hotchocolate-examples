@@ -24,13 +24,9 @@ namespace Demo.Server.Validators
             where TValidator : IInputValidator<TInput>
         {
             return descriptor.Use(
-                (_, next) =>
-                {
-                    return new InputValidationMiddleware<TInput>(
-                        typeof(TValidator),
-                        next,
-                        inputArgumentName);
-                });
+                (_, next) => new InputValidationMiddleware<TInput, TValidator>(
+                    next,
+                    inputArgumentName));
         }
     }
 }
