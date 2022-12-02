@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Demo.Server.Data;
 using FluentValidation.Results;
 using HotChocolate.Resolvers;
 
@@ -31,7 +30,7 @@ namespace Demo.Server.Validators
             var input = context.ArgumentValue<TInput>(inputArgumentName);
             if (input != null)
             {
-                IInputValidator<TInput> validator = CreateValidator(context);
+                IInputValidator<TInput> validator = (IInputValidator<TInput>)context.Service(this.validatorType);
                 ValidationResult result = await validator.ValidateAsync(input);
                 if (!result.IsValid)
                 {
@@ -49,16 +48,6 @@ namespace Demo.Server.Validators
             }
 
             await next(context).ConfigureAwait(false);
-        }
-
-        private IInputValidator<TInput> CreateValidator(IMiddlewareContext middlewareContext)
-        {
-            var services = new ServiceCollection();
-            services.AddScoped(this.validatorType);
-            services.AddScoped(_ => middlewareContext.Service<IDataContext>());
-            ServiceProvider provider = services.BuildServiceProvider();
-
-            return (IInputValidator<TInput>)provider.GetRequiredService(this.validatorType);
         }
     }
 }
